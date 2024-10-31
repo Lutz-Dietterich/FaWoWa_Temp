@@ -5,7 +5,8 @@ import dht
 from machine import Pin, deepsleep
 
 # Initialisiere den DHT11-Sensor auf Pin GPIO2 (D4 auf ESP8266/ESP32)
-dht_sensor = dht.DHT11(Pin(2))
+sensor_power = Pin(4, Pin.OUT)  # Pin für die Stromversorgung des DHT11-Sensors
+dht_sensor = dht.DHT11(Pin(2)) # Pin für die Datenleitung des DHT11-Sensors
 
 # WLAN-Interface muss aktiv sein, um send()/recv() zu verwenden
 sta = network.WLAN(network.STA_IF)  # Oder network.AP_IF
@@ -27,6 +28,8 @@ e.add_peer(peer2)  # Zweiten Peer hinzufügen
 # Funktion zum Auslesen der Daten vom DHT11-Sensor
 def read_dht_data():
     try:
+        sensor_power.value(1)  # Sensor mit Strom versorgen
+        time.sleep(2)          # 2 Sekunden warten, damit der Sensor starten kann
         dht_sensor.measure()  # Daten vom DHT11-Sensor auslesen
         temperature = dht_sensor.temperature()  # Temperatur in °C
         humidity = dht_sensor.humidity()        # Luftfeuchtigkeit in %
