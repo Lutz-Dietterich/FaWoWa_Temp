@@ -29,8 +29,12 @@ e.add_peer(peer2)  # Zweiten Peer hinzufügen
 def read_dht_data():
     try:
         sensor_power.value(1)  # Sensor mit Strom versorgen
+        print("Sensor wird gestartet...")
         time.sleep(2)          # 2 Sekunden warten, damit der Sensor starten kann
         dht_sensor.measure()  # Daten vom DHT11-Sensor auslesen
+        print("Daten vom Sensor ausgelesen.")
+        sensor_power.value(0)  # Sensor ausschalten
+        print("Sensor wird ausgeschaltet.")
         temperature = dht_sensor.temperature()  # Temperatur in °C
         humidity = dht_sensor.humidity()        # Luftfeuchtigkeit in %
         return temperature, humidity
